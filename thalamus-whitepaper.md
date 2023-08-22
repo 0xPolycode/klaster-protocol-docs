@@ -34,23 +34,93 @@ For smart contract developers, Thalamus will abstract away cross-chain communica
 
 ![Thalamus Architecture](https://github.com/0xPolycode/thalamus-protocol-whitepaper/assets/129866940/2773ed3f-1a77-4fee-9541-47bc0cf5aeea)
 
-### Implementation
+## Implementation
 
-The Thalamus protocol is implemented as a singleton contract on every supported chain. This singleton contract is tasked with creating, sending and receiving _Remote Transaction Call_ (RTC) messages. Each RTC message contains the data needed to execute the transaction on the destination chain.
+The Thalamus protocol is implemented as a singleton contract on every supported chain. This singleton contract is tasked with creating, sending and receiving _Remote Transaction Call_ (RTC) messages. Each RTC message contains the data needed to execute the transaction on the destination chain. The RTC messages are forwarded to the singleton contract on the destination chain, which then executes the action.
+
+Thalamus system works best when paired with MultiChain Asset standard contracts. So far, we have developed the standards for multichain ERC20 and ERC721 assets, but a `MultiChainAssetAdapter` can be built for any other type of asset.
+
+`ERC20MultiChainAssetAdapter` and `ERC721MultiChainAssetAdapter` both support wrapping of regular `ERC20` and `ERC721` assets, making the Thalamus system immediately adaptable for DeFi, without changing the implementation of blockchain apps (e.g. regular Uniswap or regular AAVE would work just fine).
 
 ```
 RTC Message Structure
 ---
-Destination Chain ID
-Remote Execution Call Data: RTCCallDataObject[]
+- Destination Chain ID: Number
+- Remote Execution Call Data: RTCCallDataObject[]
 
 RTCCallDataObject:
+  Destination Contract Address: string
   EVM Call Data
-  AdapterType (ERC20, ERC721, ...)
-  AdapterParams (e.g. for ERC20 - tokens used, approval amount, apporval recipients)
+  MultiChainAssetAdapter Type: string (e.g. 'ERC20')
+  MultiChainAsset Address: string
+  Adapter Params: Object (e.g. for ERC20 - tokens used, approval amount, apporval recipients)
+
 ```
 
 ![RTC Arch](https://github.com/0xPolycode/thalamus-protocol-whitepaper/assets/129866940/a5b3e4be-72c7-44e6-81f4-1345003fe39c)
 
+Let's explore the flow of a Remote Transaction Call as outlined in the diagram above. We will be swapping on Uniswap. Our assets are on Avalanche, but we want to swap on Optimism.
 
+#### 1. **Create RTC**
+A user interacts with a frontend and calls the `rtc` function on the source chain singleton contract with the RTC message as the paramters. Our RTC message would look like this:
+```json
+{
+   "destChainID":10,
+   "rtcCallData":{
+      "contract":"0xUniPoolAddressOnOptimsim",
+      "callData":"Encoded call data. Call function swap",
+      "mcAssetAdapterType":"ERC20",
+      "mcAssetAdapterParams":{
+         "tokensUsed":2000000000000000000,
+         "approvals":[
+            {
+               "amount":2000000000000000000,
+               "beneficiary":"0xUniPoolAddressOnOptimism"
+            }
+         ]
+      }
+   }
+}
+```
+We encode this and pass it on into the `rtc` function on the Thalamus singleton contract.
+
+#### 2. Commit RTC
+Thalamus singleton contract will receive the message, fetch the logic for the `MultiChainAssetAdapterType` (if specified) and choose the cross-chain communication solution to be used for the sending of the message.
+
+The selection of the cross-chain communication solution is a work-in-progress. The V1 of the Thalamus protocol will have Chainlink CCIP as it's only provider, so for V1 - this step means selecting CCIP and encoding the message. 
+
+For each way of communication, there is an `expiry` period which is attached to the message. After the `expiry` period has passed, the destination chain singleton will reject the message (if it comes through the communication channel). 
+
+After commiting the message, the source chain singleton will wait for the `ACK` or `NACK` signals from the destination chain. `ACK` signal means the action was sucessfully completed on the destination chain, while the `NACK` signal means that the message was reverted on the destination chain. 
+
+If a period of `3 * expiry` has passed and no `ACK` or `NACK` message has been received, the source chain will consider the action a failure. Since the destination chain contract must check the `expiry` variable before performing the action, the source chain can safely revert any changes made (e.g. tokens reserved) when `3 * expiry` (one `expiry` for message from source to destination, one `expiry` for message from destination back to source and one `expiry` of buffer) has passed.
+
+The expiry times for each chain should be considered at average `finality` time, with the extra expiry holding period serving as a buffer for deviations in finality time. If abberant finality tiems are observed on source or destination chains, the system will automatically `revert` all actions, since the `ACK` singnal will take too long to propagate. 
+
+The singleton will assingn each sent message a `UUID` and a status! The status of the message can be `PENDING | ACK | NACK | EXPIRED` - depending on the situations explained above.
+
+#### 3. Request RTC Execution
+Request RTC execution. The cross-chain communication provider will call the `rtc` function on the destination chain singleton contract. The contract will then execute the desired function on the desination chain and (if the function was successfull) it will call the `rtcAck` function back to the source chain. 
+
+#### 4. Execute Function on Adapter
+The singleton contract will usually interact with `MultichainAdapter` contracts which wrap around existing DeFi and NFT apps and perform some additional logic. An example would be a `UniswapMultichainAdapter` contract, which would be able to wrap the LP tokens into `MultiChainERC20` tokens and send them back to the source chain. 
+
+#### 5. & 6. Success / Fail - ACK/NACK
+If the function was a sucess, the `MultichainAdapter` contract will perform all the necessary actions and send the `ACK` signal back to the source chain through the cross-chain communication provider (e.g. CCIP). The `ACK` signal can have additional actions appended to it! E.g. -  the `ACK` for the Uniswap `swap` function will come with wrapped LP tokens. If the function reverts - the singleton will send the `NACK` back to the source chain. 
+
+#### 7. Resolve RTC status
+The source chain singleton will receive the `ACK` or `NACK` and set the status of the RTC message accordingly. In the case of `NACK`, it will revert any changes made in the first step. 
+
+#### 8. Notify user
+The singleton will emit an event that the frontend can pick up, to notify the user that the process was a success.
+
+## ThalamusDAO
+
+The Thalamus Protocol will be deployed in two phases - V1 & V2. V1 will be a single-provider phase, where only Chainlink CCIP will be used to send messages back and forth between chains and where we will test out the infrastructure and stress-test the system. V2 will introduce ThalamusDAO - a governance system where delegated members will be able to add new cross-chain communication providers.
+
+The DAO will be governed by a governance token `$THLD`. 
+
+Beyond serving as a DAO governance token, the `$THLD` token will accrue value from fees which Thalamus will charge for executing cross-chain actions. This fee will be charged in the native gas token and charged above the fee charged by the cross-chain communication provider. The fee will be used to buy and burn $THLD tokens. A part of the fee will be routed to the treasury.
+
+We are discussing the possibility of using the $THLD token to incentivise certain behaviours, such as providing redemptions for wrapped ERC20 tokens on all deployed chains.
 
