@@ -1,7 +1,7 @@
 # Thalamus • A Cross-Chain Clustering Protocol
 
+![Frame 671(1)](https://github.com/0xPolycode/thalamus-protocol-whitepaper/assets/129866940/e8ab9dae-a633-4d3b-8467-c04f15b651e9)
 
-<img style="height: 100px" src="https://github.com/0xPolycode/thalamus-protocol-whitepaper/assets/129866940/d5058d41-4401-4868-b451-5c1fdd2ef010"></img>
 
 ## Introduction
 
@@ -32,7 +32,8 @@ Thalamus is a _blockchain clustering_ protocol - defining an interaction standar
 
 For smart contract developers, Thalamus will abstract away cross-chain communication and drastically reduce the time-to-market for cross-chain applications. For existing DeFi & NFT projects, writing simple adapters will make them fully compatible with Thalamus and enable cross-chain calls to protocols such as Uniswap, AAVE, MakerDAO, ...
 
-![Thalamus Architecture](https://github.com/0xPolycode/thalamus-protocol-whitepaper/assets/129866940/2773ed3f-1a77-4fee-9541-47bc0cf5aeea)
+![Untitled Diagram drawio(30)](https://github.com/0xPolycode/thalamus-protocol-whitepaper/assets/129866940/583793c0-b53b-4787-a0e9-43a08db7a0b5)
+
 
 ## Implementation
 
@@ -56,8 +57,8 @@ RTCCallDataObject:
   Adapter Params: Object (e.g. for ERC20 - tokens used, approval amount, apporval recipients)
 
 ```
+![Untitled Diagram drawio(32)](https://github.com/0xPolycode/thalamus-protocol-whitepaper/assets/129866940/f0f9681f-7784-45e5-ac45-1168295a4c27)
 
-![RTC Arch](https://github.com/0xPolycode/thalamus-protocol-whitepaper/assets/129866940/a5b3e4be-72c7-44e6-81f4-1345003fe39c)
 
 Let's explore the flow of a Remote Transaction Call as outlined in the diagram above. We will be swapping on Uniswap. Our assets are on Avalanche, but we want to swap on Optimism.
 
