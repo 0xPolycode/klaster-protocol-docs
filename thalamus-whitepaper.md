@@ -23,7 +23,7 @@ Lately, there has been a lot of progress in cross-chain communication protocols 
 
 In this paper, we are going to present Thalamus - a middleware protocol positioned between smart contracts and cross-chain communication solutions, enabling a seamless, developer-friendly & standardized way for all Web3 apps to adapt to the cross-chain future. 
 
-Borrowing from networking terminology, we'll define the term **Blokchain Clustering** - Making multiple, independent blockchain networks & multiple cross-chain communication solutions act as a single virtual composable and atomic blockchain network. 
+Borrowing from networking terminology, we'll define the term **Blokchain Clustering** - Making multiple, independent blockchain networks & multiple cross-chain communication solutions act as a single virtual blockchain network with preserved atomicity and composability. 
 
 ## Thalamus
 
