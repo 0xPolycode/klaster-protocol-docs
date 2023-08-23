@@ -27,11 +27,17 @@ Borrowing from networking terminology, we'll define the term **Blokchain Cluster
 
 ## Thalamus
 
-Thalamus is a _blockchain clustering_ protocol - defining an interaction standard for smart contracts to communicate through. With Thalamus - users can interact with smart contracts without needing to know *which* blockchain network the contract is on. Instead, the users will interact with a blockchain of their choosing and Thalamus will work to aggregate all the cross-chain communication providers to enable a seamless interaction with *any* contract on *any* chain, while preserving composability and atomicity of the requested operations.
+Thalamus is _not_ a cross-chain communication protocol. Thalamus is a standardized interface which abstracts away cross-chain communication protocols from smart contract developers. It enables easy conversion of exsiting DeFi, NFT & payment apps into cross-chain native apps _and_ drastically reduces the time needed to develop new cross-chain applications. The V1 of Thalamus will have all of its cross-chain communication handled by ChainLink CCIP. Thalamus is a set of smart contracts, deployed on all compatible blockchain networks, which drastically reduce integration time of new and existing DeFi apps into cross-chain protocols, such as CCIP.
 
-For smart contract developers, Thalamus will abstract away cross-chain communication and drastically reduce the time-to-market for cross-chain applications. For existing DeFi & NFT projects, writing simple adapters will make them fully compatible with Thalamus and enable cross-chain calls to protocols such as Uniswap, AAVE, MakerDAO, ...
+It achieves this through the creation of several standards:
 
-![Untitled Diagram drawio(30)](https://github.com/0xPolycode/thalamus-protocol-whitepaper/assets/129866940/583793c0-b53b-4787-a0e9-43a08db7a0b5)
+- **Two Way Handshake RTC** - Remote Transaction Calls - a standardized, composable way to call a function on an EVM smart contract from one blockchain network to another. Thalamus defines a two-way handshake standard so that Web3 apps can keep composability & atomicity while communicating though cross-chain solutions.
+- **Native Multichain Assets** - Extensions of ERC20 and ERC721 standards, which make them cross-chain compatible.
+    - **Native Multichain ERC20** - An ERC20 token which has the same address on all deployed blockchain networks and has its supply _shared_ between multiple blockchain networks through secure cross-chain communication solution.
+    - **Native Multichain ERC721** - An NFT which has the same address on all deployed blockchain networks and has its items _shared_ between multiple blockchain networks through secure cross-chain communication solution.
+- **dApp Adapters** - Smart contracts which handle the additional logic required by `Thalamus RTC` to perform cross-chain blockchain transactions. They are generally lightweight wrappers around existing dApps _or_ built-into solutions which are cross-chain since inception. 
+
+<img style="height:450px" src="https://github.com/0xPolycode/thalamus-protocol-tech/assets/129866940/289442c9-288d-420c-a666-b28bae2743cd"></img>
 
 
 ## Implementation
