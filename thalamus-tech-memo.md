@@ -37,7 +37,7 @@ It achieves this through the creation of several standards:
     - **Native Multichain ERC721** - An NFT which has the same address on all deployed blockchain networks and has its items _shared_ between multiple blockchain networks through secure cross-chain communication solution.
 - **dApp Adapters** - Smart contracts which handle the additional logic required by `Thalamus RTC` to perform cross-chain blockchain transactions. They are generally lightweight wrappers around existing dApps _or_ built-into solutions which are cross-chain since inception. 
 
-<img style="height:450px" src="https://github.com/0xPolycode/thalamus-protocol-tech/assets/129866940/289442c9-288d-420c-a666-b28bae2743cd"></img>
+<img style="height: 450px" src="https://github.com/0xPolycode/thalamus-protocol-tech/assets/129866940/ed85e4f4-9cbc-44e8-8ab0-62fa6ae756d3"></img>
 
 
 ## Implementation
@@ -62,7 +62,7 @@ RTCCallDataObject:
   Adapter Params: Object (e.g. for ERC20 - tokens used, approval amount, apporval recipients)
 
 ```
-![Untitled Diagram drawio(32)](https://github.com/0xPolycode/thalamus-protocol-whitepaper/assets/129866940/f0f9681f-7784-45e5-ac45-1168295a4c27)
+![Untitled Diagram drawio(35)](https://github.com/0xPolycode/thalamus-protocol-tech/assets/129866940/82e35fa6-dc8f-4e6a-bbfe-cbf341af301b)
 
 
 Let's explore the flow of a Remote Transaction Call as outlined in the diagram above. We will be swapping on Uniswap. Our assets are on Avalanche, but we want to swap on Optimism.
