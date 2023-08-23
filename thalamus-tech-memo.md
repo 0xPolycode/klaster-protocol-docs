@@ -40,7 +40,7 @@ It achieves this through the creation of several standards:
       
 - **dApp Adapters** - Smart contracts which handle the additional logic required by `Thalamus RTC` to perform cross-chain blockchain transactions. They are generally lightweight wrappers around existing dApps _or_ built-into solutions which are cross-chain since inception. 
 
-<img style="height:550px" src="https://github.com/0xPolycode/thalamus-protocol-tech/assets/129866940/01f7c9e5-db62-4124-bf43-f42cb78a9e2e"></img>
+<img style="height: 600px" src="https://github.com/0xPolycode/thalamus-protocol-tech/assets/129866940/4f977522-5a96-479f-a174-b570eeb93942"></img>
 
 ## Implementation
 
