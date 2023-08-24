@@ -148,8 +148,6 @@ There is no defined timeline for this, and serious development of this would be 
 
 The idea of Thalamus V2 is to provide a standardized layer, through which smart contract developers can consume multiple cross-chain communication providers. The cross-chain providers would need to build simple adapters, which would _translate_ Thalamus messages into messages compliant with their solution. 
 
-<img style="height: 650px" src="https://github.com/0xPolycode/thalamus-protocol-tech/assets/129866940/f4bc205d-0a2f-4d4b-af69-86af308241b8"></img>
-
 ### Selecting cross-chain communication solutions
 
 Many of these topics are left to be discussed for technical discussions with early partners and community later on, but what follows is a simple proposal of a mechanisam for selection of cross-chain provider for every message.
