@@ -25,13 +25,13 @@ In this paper, we are going to present Thalamus - a middleware protocol position
 
 Borrowing from networking terminology, we'll define the term **Blokchain Clustering** - Making multiple, independent blockchain networks & multiple cross-chain communication solutions act as a single virtual blockchain network with preserved atomicity and composability. 
 
-## Thalamus
-
+## Thalamus V1
+ 
 Thalamus is _not_ a cross-chain communication protocol. Thalamus is a standardized interface which abstracts away cross-chain communication protocols from smart contract developers. It enables easy conversion of exsiting DeFi, NFT & payment apps into cross-chain native apps _and_ drastically reduces the time needed to develop new cross-chain applications. The V1 of Thalamus will have all of its cross-chain communication handled by ChainLink CCIP. Thalamus is a set of smart contracts, deployed on all compatible blockchain networks, which drastically reduce integration time of new and existing DeFi apps into cross-chain protocols, such as CCIP.
 
 It achieves this through the creation of several standards:
 
-- **Two Way Handshake RTC** - Remote Transaction Calls - a standardized, composable way to call a function on an EVM smart contract from one blockchain network to another. Thalamus defines a two-way handshake standard so that Web3 apps can keep composability & atomicity while communicating though cross-chain solutions.
+- **Two Way Handshake RTC** - Remote Transaction Calls - a standardized, composable way to call a function on an EVM smart contract from one blockchain network to another. The point of the two-way handshake is to preserve atomicity and enable multi-chain transaction hops (e.g. Swap tokens on Uniswap on Optimism _and then_ supply the LP tokens to Curve on Polygon _and then_ put those crv tokens into mainnet Yearn). With Thalamus two-way handshake, the developers can be assured that either all actions in the chain succeeed or none of them do - enabling easy creation of cross-chain DeFi strategies.
   
 - **Native Multichain Assets** - Extensions of ERC20 and ERC721 standards, which make them cross-chain compatible.
     - **Native Multichain ERC20** - An ERC20 token which has the same address on all deployed blockchain networks and has its supply _shared_ between multiple blockchain networks through secure cross-chain communication solution.
@@ -131,4 +131,37 @@ The DAO will be governed by a governance token `$THLD`.
 Beyond serving as a DAO governance token, the `$THLD` token will accrue value from fees which Thalamus will charge for executing cross-chain actions. This fee will be charged in the native gas token and charged above the fee charged by the cross-chain communication provider. The fee will be used to buy and burn $THLD tokens. A part of the fee will be routed to the treasury.
 
 We are discussing the possibility of using the $THLD token to incentivise certain behaviours, such as providing redemptions for wrapped ERC20 tokens on all deployed chains.
+
+We currenly have several proposed mechanisms of usage for the $THLD token:
+
+* Governance token
+* Maintaining wrap/unwrap liquidity on chains (for wrapped tokens)
+* 
+
+## Thalamus V2
+
+The core idea of Thalamus is to become neutral cross-chain `middleware`, which can standardize the way cross-chain Web3 apps are written! For this to work, the Thalamus protocol needs to aggregate multiple cross-chain communication providers into a universal interface which smart contract developers can use to add robust cross-chain communication to their dApps.
+
+There is no defined timeline for this, and serious development of this would be done only _after_ some traction has been achieved with V1 and all features are subject to change in discussion with other developers, early partners on the project or other intersted parties. Treat the rest of the document as a loose proposal on potential mechanisms, instead of set-in-stone technical document.
+
+### Cross-Chain Provider Aggregation
+
+The idea of Thalamus V2 is to provide a standardized layer, through which smart contract developers can consume multiple cross-chain communication providers. The cross-chain providers would need to build simple adapters, which would _translate_ Thalamus messages into messages compliant with their solution. 
+
+<img style="height: 650px" src="https://github.com/0xPolycode/thalamus-protocol-tech/assets/129866940/f4bc205d-0a2f-4d4b-af69-86af308241b8"></img>
+
+### Selecting cross-chain communication solutions
+
+Many of these topics are left to be discussed for technical discussions with early partners and community later on, but what follows is a simple proposal of a mechanisam for selection of cross-chain provider for every message.
+
+1. The user creates a message to interact with some destination chain which uses one or more `MultiChainAsset` assets.
+2. The Thalamus singletion contract on the source chain receives the message and queries each `MultiChainAsset` for the list of cross-chain communication solutions which they support
+3. The Thalamus singleton contract queries a `preferencesRegistry` to check whether the user who is making the request has a preference for a certain cross-chain communication solution
+4. If the user and asset solutions match in only one provider, that provider is used.
+5. If the user and asset solutions match in multiple providers, some form of selection is used (to be discussed later)
+
+It is important for the asset issuers to be able to select the cross-chain providers which they trust, since the integrity of their `MultiChainAsset` will depend on the robustness of the cross-chain solution which is used. 
+
+It is also important to allow users to set their preferences for the cross-chain communication standards they use, since this will define the security profile of their cross-chain interactions.
+
 
