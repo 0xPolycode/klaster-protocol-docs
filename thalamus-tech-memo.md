@@ -1,6 +1,6 @@
 # Thalamus • A Cross-Chain Clustering Protocol
 
-<img style="height:100px" src="https://github.com/0xPolycode/thalamus-protocol-whitepaper/assets/129866940/e8ab9dae-a633-4d3b-8467-c04f15b651e9"></img>
+<img style="height:100px" src="https://github.com/0xPolycode/thalamus-protocol-tech/assets/129866940/c0b2427d-e853-40b6-847f-2328f7c47c7d"></img>
 
 ## Introduction
 
