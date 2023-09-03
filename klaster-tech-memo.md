@@ -2,6 +2,8 @@
 
 <img src="https://github.com/0xPolycode/klaster-protocol-docs/assets/129866940/e39b2ff8-0edd-4eaf-a607-90ad60d80b44" style="height: 100px"></img>
 
+Built on Chainlink CCIP
+
 ## Introduction
 
 Since the advent of smart contract blockchains in 2014 - blockchain researchers and developers have been working towards solving a few fundamental issues with the design of blockchain networks. One of those key problems is scalability - the blockchain design (as it exists today) must verify and store *all* transactions ever processed on it. This makes sense for large transactions between big accounts, but - if we're going to make blockchain the default financial backbone - there is no sense to employ the same security and finality for a person buying a cup of coffee and an insurance company paying out a multi-million insurance claim.
