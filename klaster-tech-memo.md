@@ -1,4 +1,4 @@
-# Thalamus • Atomicity & Composability in Cross-Chain Web3
+# Thalamus • Blockchain Clustering Protocol
 
 <img src="https://github.com/0xPolycode/klaster-protocol-docs/assets/129866940/e39b2ff8-0edd-4eaf-a607-90ad60d80b44" style="height: 100px"></img>
 
