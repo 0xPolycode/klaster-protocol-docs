@@ -1,6 +1,6 @@
 # Thalamus • Atomicity & Composability in Cross-Chain Web3
 
-<img style="height:100px" src="https://github.com/0xPolycode/thalamus-protocol-tech/assets/129866940/c0b2427d-e853-40b6-847f-2328f7c47c7d"></img>
+<img src="https://github.com/0xPolycode/klaster-protocol-docs/assets/129866940/e39b2ff8-0edd-4eaf-a607-90ad60d80b44" style="height: 100px"></img>
 
 ## Introduction
 
@@ -21,34 +21,34 @@ A protocol which solves cross-chain composability and atomicity would truly enab
 
 Lately, there has been a lot of progress in cross-chain communication protocols and standards - with notable examples such as Chainlink CCIP, Connext or Layer Zero. These communication protocols enable blockchains to share messages and execute remotely execute actions across different blockchain networks. 
 
-In this paper, we are going to present Thalamus - a middleware protocol positioned between smart contracts and cross-chain communication solutions, enabling a seamless, developer-friendly & standardized way for all Web3 apps to adapt to the cross-chain future. 
+In this paper, we are going to present Klaster - a middleware protocol positioned between smart contracts and cross-chain communication solutions, enabling a seamless, developer-friendly & standardized way for all Web3 apps to adapt to the cross-chain future. 
 
 Borrowing from networking terminology, we'll define the term **Blokchain Clustering** - Making multiple, independent blockchain networks & multiple cross-chain communication solutions act as a single virtual blockchain network with preserved atomicity and composability. 
 
-## Thalamus V1
+## Klaster V1
  
-Thalamus is _not_ a cross-chain communication protocol. Thalamus is a standardized interface which abstracts away cross-chain communication protocols from smart contract developers. It enables easy conversion of exsiting DeFi, NFT & payment apps into cross-chain native apps _and_ drastically reduces the time needed to develop new cross-chain applications. The V1 of Thalamus will have all of its cross-chain communication handled by ChainLink CCIP. Thalamus is a set of smart contracts, deployed on all compatible blockchain networks, which drastically reduce integration time of new and existing DeFi apps into cross-chain protocols, such as CCIP.
+Klaster is _not_ a cross-chain communication protocol. Klaster is a standardized interface which abstracts away cross-chain communication protocols from smart contract developers. It enables easy conversion of exsiting DeFi, NFT & payment apps into cross-chain native apps _and_ drastically reduces the time needed to develop new cross-chain applications. The V1 of Klaster will have all of its cross-chain communication handled by ChainLink CCIP. Klaster is a set of smart contracts, deployed on all compatible blockchain networks, which drastically reduce integration time of new and existing DeFi apps into cross-chain protocols, such as CCIP.
 
 It achieves this through the creation of several standards:
 
-- **Two Way Handshake RTC** - Remote Transaction Calls - a standardized, composable way to call a function on an EVM smart contract from one blockchain network to another. The point of the two-way handshake is to preserve atomicity and enable multi-chain transaction hops (e.g. Swap tokens on Uniswap on Optimism _and then_ supply the LP tokens to Curve on Polygon _and then_ put those crv tokens into mainnet Yearn). With Thalamus two-way handshake, the developers can be assured that either all actions in the chain succeeed or none of them do - enabling easy creation of cross-chain DeFi strategies.
+- **Two Way Handshake RTC** - Remote Transaction Calls - a standardized, composable way to call a function on an EVM smart contract from one blockchain network to another. The point of the two-way handshake is to preserve atomicity and enable multi-chain transaction hops (e.g. Swap tokens on Uniswap on Optimism _and then_ supply the LP tokens to Curve on Polygon _and then_ put those crv tokens into mainnet Yearn). With Klaster two-way handshake, the developers can be assured that either all actions in the chain succeeed or none of them do - enabling easy creation of cross-chain DeFi strategies.
   
 - **Native Multichain Assets** - Extensions of ERC20 and ERC721 standards, which make them cross-chain compatible.
     - **Native Multichain ERC20** - An ERC20 token which has the same address on all deployed blockchain networks and has its supply _shared_ between multiple blockchain networks through secure cross-chain communication solution.
       
     - **Native Multichain ERC721** - An NFT which has the same address on all deployed blockchain networks and has its items _shared_ between multiple blockchain networks through secure cross-chain communication solution.
       
-- **dApp Adapters** - Smart contracts which handle the additional logic required by `Thalamus RTC` to perform cross-chain blockchain transactions. They are generally lightweight wrappers around existing dApps _or_ built-into solutions which are cross-chain since inception. 
+- **dApp Adapters** - Smart contracts which handle the additional logic required by `Klaster RTC` to perform cross-chain blockchain transactions. They are generally lightweight wrappers around existing dApps _or_ built-into solutions which are cross-chain since inception. 
 
 <img style="height: 600px" src="https://github.com/0xPolycode/thalamus-protocol-tech/assets/129866940/4f977522-5a96-479f-a174-b570eeb93942"></img>
 
 ## Implementation
 
-The Thalamus protocol is implemented as a singleton contract on every supported chain. This singleton contract is tasked with creating, sending and receiving _Remote Transaction Call_ (RTC) messages. Each RTC message contains the data needed to execute the transaction on the destination chain. The RTC messages are forwarded to the singleton contract on the destination chain, which then executes the action.
+The Klaster protocol is implemented as a singleton contract on every supported chain. This singleton contract is tasked with creating, sending and receiving _Remote Transaction Call_ (RTC) messages. Each RTC message contains the data needed to execute the transaction on the destination chain. The RTC messages are forwarded to the singleton contract on the destination chain, which then executes the action.
 
-Thalamus system works best when paired with MultiChain Asset standard contracts. So far, we have developed the standards for multichain ERC20 and ERC721 assets, but a `MultiChainAssetAdapter` can be built for any other type of asset.
+Klaster system works best when paired with MultiChain Asset standard contracts. So far, we have developed the standards for multichain ERC20 and ERC721 assets, but a `MultiChainAssetAdapter` can be built for any other type of asset.
 
-`ERC20MultiChainAssetAdapter` and `ERC721MultiChainAssetAdapter` both support wrapping of regular `ERC20` and `ERC721` assets, making the Thalamus system immediately adaptable for DeFi, without changing the implementation of blockchain apps (e.g. regular Uniswap or regular AAVE would work just fine).
+`ERC20MultiChainAssetAdapter` and `ERC721MultiChainAssetAdapter` both support wrapping of regular `ERC20` and `ERC721` assets, making the Klaster system immediately adaptable for DeFi, without changing the implementation of blockchain apps (e.g. regular Uniswap or regular AAVE would work just fine).
 
 ```
 RTC Message Structure
@@ -90,12 +90,12 @@ A user interacts with a frontend and calls the `rtc` function on the source chai
    }
 }
 ```
-We encode this and pass it on into the `rtc` function on the Thalamus singleton contract.
+We encode this and pass it on into the `rtc` function on the Klaster singleton contract.
 
 #### 2. Commit RTC
-Thalamus singleton contract will receive the message, fetch the logic for the `MultiChainAssetAdapterType` (if specified) and choose the cross-chain communication solution to be used for the sending of the message.
+Klaster singleton contract will receive the message, fetch the logic for the `MultiChainAssetAdapterType` (if specified) and choose the cross-chain communication solution to be used for the sending of the message.
 
-The selection of the cross-chain communication solution is a work-in-progress. The V1 of the Thalamus protocol will have Chainlink CCIP as it's only provider, so for V1 - this step means selecting CCIP and encoding the message. 
+The selection of the cross-chain communication solution is a work-in-progress. The V1 of the Klaster protocol will have Chainlink CCIP as it's only provider, so for V1 - this step means selecting CCIP and encoding the message. 
 
 For each way of communication, there is an `expiry` period which is attached to the message. After the `expiry` period has passed, the destination chain singleton will reject the message (if it comes through the communication channel). 
 
